@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pronostico Del Clima</title>
+    <style>
+        body{
+            font-family: Arial, Helvetica, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .contenedor{
+            text-align: center;
+            padding: 7px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+            background-color: #fff;
+        }
+        h1{
+            margin: 0;
+            padding: 10px;
+            background-color: #06527e;
+            color: #fff;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+        .description{
+            font-size: 18px;
+            margin: 10px 0;
+            padding: auto;
+        }
+        .intCiudad{
+            padding: 10px;
+            margin: 10px 0;
+            width: 60%;
+            border-radius: 10px;
+            border: 1px solid #000000;
+        }
+        .city-name{
+            font-size: 24px;
+            font-weight: bold;
+            color: #69767e;
+        }
+        .temp{
+            font-size: 18px;
+            font-weight: bold;
+        }
+        img{
+            width: 100px;
+            height: 100px;
+        }
+        button{
+            padding: 7px;
+            border: none;
+            border-radius: 10px;
+            background-color: #333;
+            color: #fff;
+            cursor: pointer;
+        }
+        button:hover{
+            background-color: #000000;
+        }
+    </style>
+</head>
+<body>
+    <div class="contenedor">
+        <h1>Climita</h1>
+        <p class="description">Pon el nombre de una ciudad:</p>
+        <input class="intCiudad" type="text" id="cityInput" placeholder="Introduce el nombre aqui...">
+        <button onclick="getWeather()">Navegador</button>
+        <div class="info-clima" id="w-icon"></div>
+        <div class="info-clima" id="weatherInfo"></div>
+    </div>
+    <script>
+        function getWeather(){
+            const city = document.getElementById("cityInput").value;
+            const apiKey = "068a15bde6c177c4b91727e163c78068";
+            const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+            fetch(url)
+            .then(response => response.json())
+            .then(data => {
+                const weatherInfo = document.getElementById("weatherInfo");
+                weatherInfo.innerHTML = `
+                <h2 class="city-name">${data.name}</h2>
+                <p>Temperatura: <spam class="temp">${data.main.temp}</spam></p>
+                <h1 class="has-text-inf">
+                    <img src="https://openweathermap.org/img/wn/${data.weather[0].icon}@2x.png" alt="icono del clima">
+                    </h1>
+                    <p>Humedad: <spam class="temp">${data.main.humidty}%</spam></p>
+                `;
+
+            })
+            .catch(error =>{
+                console.error("Error fetching weather data:", error);
+                const weatherInfo = document.getElementById("weatherInfo");
+                weatherInfo.innerHTML = `<p>Failed to fetch weather data. Please try again later.</p>`;
+            });
+        }
+    </script>
+</body>
+</html>
